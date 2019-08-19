@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Link from 'gatsby-link';
+import { Link, useStaticQuery, graphql } from 'gatsby';
 import { arrayMove } from 'react-sortable-hoc';
 import shortId from 'short-id';
+import Layout from '../components/layout';
 
 import { Button } from '../styledComponents/theme';
 import { Heading2 } from '../styledComponents/typography';
@@ -18,7 +19,7 @@ const ActionContainer = styled.div`
   justify-content: flex-end;
 `;
 
-class NewPollPage extends Component {
+class NewPollPageComponent extends Component {
   state = {
     options: [
       {
@@ -166,5 +167,25 @@ class NewPollPage extends Component {
     );
   }
 }
+
+const NewPollPage = () => {
+  const data = useStaticQuery(graphql`
+  {
+    site {
+      siteMetadata {
+        title
+      }
+    }
+  }
+`);
+
+  return (
+    <Layout data={data}>
+      {() => (
+        <NewPollPageComponent />
+      )}
+    </Layout>
+  )
+};
 
 export default NewPollPage;
