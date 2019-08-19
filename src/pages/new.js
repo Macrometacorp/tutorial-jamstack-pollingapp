@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Link, useStaticQuery, graphql } from 'gatsby';
+import { useStaticQuery, graphql } from 'gatsby';
 import { arrayMove } from 'react-sortable-hoc';
 import shortId from 'short-id';
 import Layout from '../components/layout';
@@ -19,30 +19,28 @@ const ActionContainer = styled.div`
   justify-content: flex-end;
 `;
 
+const TitleContainer = styled.div`
+  display: inline-flex;
+  width: 350px;
+  flex-direction: column;
+  margin-bottom: 30px;
+`;
+
+const TitleLabel = styled.label`
+  font-weight: bold;
+`;
+
+const TitleInput = styled.input`
+  color: black;
+  font-size: 18px;
+`;
+
+
 class NewPollPageComponent extends Component {
   state = {
-    options: [
-      {
-        text: 'option1',
-        id: '123avcs232',
-        editing: false,
-      },
-      {
-        text: 'option2',
-        id: '123av35df2',
-        editing: false,
-      },
-      {
-        text: 'option3',
-        id: '12323dsdsv35df2',
-        editing: false,
-      },
-      {
-        text: 'option4',
-        id: 'ac24312v35df2',
-        editing: false,
-      },
-    ],
+    title: '',
+    options: [],
+    loading: false,
   };
   // to keep track of what item is being edited
   editing = null;
@@ -143,12 +141,37 @@ class NewPollPageComponent extends Component {
     });
   };
 
+  handleTitleChange = e => {
+    const { value } = e.target;
+
+    this.setState({
+      title: value,
+    });
+  };
+
   render() {
-    const { options } = this.state;
+    const { options, title, loading } = this.state;
+
+    const optionsWithText = options.filter(({ text }) => !!text.trim());
+    const disableCreate = !title || optionsWithText.length < 2 || loading;
+    console.log({
+      title,
+      optionsWithText,
+      loading,
+      disableCreate
+    });
 
     return (
       <div>
         <Heading2>Create a new Poll</Heading2>
+        <TitleContainer>
+          <TitleLabel htmlFor="newPollTitle">Title</TitleLabel>
+          <TitleInput
+            id="newPollTitle"
+            value={title}
+            onChange={this.handleTitleChange}
+          />
+        </TitleContainer>
         <NewPoll
           options={options}
           onToggleEdit={this.handleToggleEdit}
@@ -158,10 +181,17 @@ class NewPollPageComponent extends Component {
           onDelete={this.handleDelete}
         />
         <ActionContainer>
-          <Link to="/new">
-            <Button>Create</Button>
-          </Link>
-          <CreateButton onClick={this.handleAddItem}>Add</CreateButton>
+          <Button
+            disabled={disableCreate}
+            onClick={!disableCreate && this.handleCreate}>
+            {loading ? 'Creating...' : 'Create'}
+          </Button>
+
+          <CreateButton
+            disabled={loading}
+            onClick={!loading && this.handleAddItem}>
+            Add
+          </CreateButton>
         </ActionContainer>
       </div>
     );

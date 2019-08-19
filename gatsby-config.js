@@ -39,7 +39,7 @@ module.exports = {
         },
         collection: 'poll',
         map: {
-          coll1: { title: "text/markdown", content: "text/markdown" }
+          poll: { title: "text/markdown", content: "text/markdown" }
         }
       }
     },
