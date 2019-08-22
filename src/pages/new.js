@@ -4,10 +4,12 @@ import { useStaticQuery, graphql } from 'gatsby';
 import { arrayMove } from 'react-sortable-hoc';
 import shortId from 'short-id';
 import Layout from '../components/layout';
+import { navigate } from 'gatsby';
 
 import { Button } from '../styledComponents/theme';
 import { Heading2 } from '../styledComponents/typography';
 import NewPoll from '../components/NewPoll/index';
+import FabricContext from "../context/JSC8Context";
 
 const CreateButton = styled(Button)`
   background-image: linear-gradient(19deg, #21d4fd 0%, #b721ff 100%);
@@ -126,7 +128,7 @@ class NewPollPageComponent extends Component {
         {
           id,
           text: '',
-          editing: true,
+          count: 0
         },
       ],
     });
@@ -149,51 +151,95 @@ class NewPollPageComponent extends Component {
     });
   };
 
+  handleCreate = (updateCollectionData) => {
+    const { title, options } = this.state;
+    const { pluginOptions: { collection } } = this.props;
+    const obj = {
+      polls: {
+        [title]: [
+          ...options
+        ]
+      }
+    };
+
+    this.setState({ loading: true }, () => {
+      updateCollectionData(obj)
+        .then(() => {
+          this.setState({
+            options: [],
+            loading: false,
+            title: ""
+          });
+          navigate(
+            "/poll/",
+            {
+              state: {
+                collection,
+                title,
+                options
+              }
+            }
+          );
+        })
+        .catch(error => {
+          console.log(error);
+        })
+    });
+  }
+
   render() {
     const { options, title, loading } = this.state;
+    const { pluginOptions: { auth: { tenant, user, password }, config, geoFabric, collection }, documentKey } = this.props;
 
     const optionsWithText = options.filter(({ text }) => !!text.trim());
     const disableCreate = !title || optionsWithText.length < 2 || loading;
-    console.log({
-      title,
-      optionsWithText,
-      loading,
-      disableCreate
-    });
 
     return (
-      <div>
-        <Heading2>Create a new Poll</Heading2>
-        <TitleContainer>
-          <TitleLabel htmlFor="newPollTitle">Title</TitleLabel>
-          <TitleInput
-            id="newPollTitle"
-            value={title}
-            onChange={this.handleTitleChange}
-          />
-        </TitleContainer>
-        <NewPoll
-          options={options}
-          onToggleEdit={this.handleToggleEdit}
-          onTextChange={this.handleTextChange}
-          onKeyDown={this.handleKeydown}
-          onSortEnd={this.handleSortEnd}
-          onDelete={this.handleDelete}
-        />
-        <ActionContainer>
-          <Button
-            disabled={disableCreate}
-            onClick={!disableCreate && this.handleCreate}>
-            {loading ? 'Creating...' : 'Create'}
-          </Button>
+      <FabricContext.Consumer >
+        {
+          fabricCtx => {
+            if (!fabricCtx.isSignedIn) {
+              fabricCtx.updateFabric(config, tenant, user, password, geoFabric, collection, documentKey);
+              return <div>Loading...</div>;
+            } else {
+              return (
+                <div>
+                  <Heading2>Create a new Poll</Heading2>
+                  <TitleContainer>
+                    <TitleLabel htmlFor="newPollTitle">Title</TitleLabel>
+                    <TitleInput
+                      id="newPollTitle"
+                      value={title}
+                      onChange={this.handleTitleChange}
+                    />
+                  </TitleContainer>
+                  <NewPoll
+                    options={options}
+                    onToggleEdit={this.handleToggleEdit}
+                    onTextChange={this.handleTextChange}
+                    onKeyDown={this.handleKeydown}
+                    onSortEnd={this.handleSortEnd}
+                    onDelete={this.handleDelete}
+                  />
+                  <ActionContainer>
+                    <Button
+                      disabled={disableCreate}
+                      onClick={(async () => { !disableCreate && this.handleCreate(fabricCtx.updateCollectionData) })}>
+                      {loading ? 'Creating...' : 'Create'}
+                    </Button>
 
-          <CreateButton
-            disabled={loading}
-            onClick={!loading && this.handleAddItem}>
-            Add
-          </CreateButton>
-        </ActionContainer>
-      </div>
+                    <CreateButton
+                      disabled={loading}
+                      onClick={() => { !loading && this.handleAddItem() }}>
+                      Add
+            </CreateButton>
+                  </ActionContainer>
+                </div>
+              )
+            }
+          }
+        }
+      </FabricContext.Consumer >
     );
   }
 }
@@ -201,18 +247,40 @@ class NewPollPageComponent extends Component {
 const NewPollPage = () => {
   const data = useStaticQuery(graphql`
   {
-    site {
-      siteMetadata {
-        title
+    allSitePlugin(filter: {name: {eq: "gatsby-source-c8db"}}) {
+      edges {
+        node {
+          name
+          pluginOptions {
+            auth {
+              password
+              tenant
+              user
+            }
+            config
+            geoFabric
+            collection
+          }
+        }
+      }
+    }
+    allC8Document {
+      edges {
+        node {
+          _key
+        }
       }
     }
   }
 `);
 
+  const { pluginOptions } = data.allSitePlugin.edges[0].node;
+  const documentKey = data.allC8Document.edges[0].node["_key"];
+
   return (
-    <Layout data={data}>
+    <Layout>
       {() => (
-        <NewPollPageComponent />
+        <NewPollPageComponent pluginOptions={pluginOptions} documentKey={documentKey} />
       )}
     </Layout>
   )

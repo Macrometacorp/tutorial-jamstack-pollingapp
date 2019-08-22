@@ -7,11 +7,6 @@ import { Button } from '../styledComponents/theme';
 const IndexPage = () => {
   const data = useStaticQuery(graphql`
   {
-    site {
-      siteMetadata {
-        title
-      }
-    }
     allC8Document {
       edges {
         node {
@@ -35,7 +30,7 @@ const IndexPage = () => {
   const content = data.allC8Document.edges[0].node.content.childMarkdownRemark.html;
 
   return (
-    <Layout data={data}>
+    <Layout>
       {() => (
         <>
           <div>

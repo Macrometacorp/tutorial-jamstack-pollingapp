@@ -37,6 +37,7 @@ module.exports = {
           user: "root",
           password: "demo"
         },
+        geoFabric: "_system",
         collection: 'poll',
         map: {
           poll: { title: "text/markdown", content: "text/markdown" }
