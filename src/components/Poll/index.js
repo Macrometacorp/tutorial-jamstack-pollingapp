@@ -95,7 +95,7 @@ const Poll = ({
     onSelectOption,
     onVote,
 }) => {
-    const optionsArray = options;
+    const optionsArray = options || [];
     const renderOptions = !loading && optionsArray.length > 0;
     const renderVoteButton = renderOptions && !hasVoted;
     const voteIsDisabled = loading || !selection;

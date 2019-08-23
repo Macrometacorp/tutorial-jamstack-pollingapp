@@ -128,7 +128,8 @@ class NewPollPageComponent extends Component {
         {
           id,
           text: '',
-          count: 0
+          editing: true,
+          votes: 0
         },
       ],
     });

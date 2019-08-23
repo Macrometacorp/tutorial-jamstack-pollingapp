@@ -33,15 +33,31 @@ class FabricProvider extends React.Component {
         return fabric.query(query);
     }
 
-    onSubmitVote = (data) => {
-        // const { documentKey, collection, fabric } = this.state;
-        // const query = `UPDATE "${documentKey}" WITH ${JSON.stringify(obj)} IN ${collection}`;
-        // return fabric.query(query);
+    onSubmitVote = async (pollName, pollId) => {
 
-        // ABHISHEK: see how demo handles it
+        const { fabric, collection, documentKey } = this.state;
+
+        const voteArr = await this.getPollData(pollName);
+
+        const voteObj = voteArr.find(vote => vote.id === pollId);
+        voteObj.votes += 1;
+
+        const pollObj = {
+            polls: { [pollName]: { ...voteArr } }
+        };
+
+        const updatePollQuery = `UPDATE "${documentKey}" WITH ${JSON.stringify(pollObj)} in ${collection}`;
+        return fabric.query(updatePollQuery);
     }
 
-    getData() { }
+    getPollData = async (pollName) => {
+        const { fabric, collection, documentKey } = this.state;
+        debugger;
+        const query = `FOR x in ${collection} FILTER x._key=="${documentKey}" return x.polls`;
+        const cursor = await fabric.query(query);
+        const results = await cursor.all();
+        return results[0][pollName];
+    }
 
     render() {
         const { isSignedIn, fabric } = this.state;
@@ -51,7 +67,9 @@ class FabricProvider extends React.Component {
                 isSignedIn,
                 fabric,
                 updateFabric: this.updateFabric,
-                updateCollectionData: this.updateCollectionData
+                updateCollectionData: this.updateCollectionData,
+                onSubmitVote: this.onSubmitVote,
+                getPollData: this.getPollData
             }}>
                 {children}
             </FabricContext.Provider>

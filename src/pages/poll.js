@@ -10,24 +10,35 @@ class PollContainer extends Component {
         loading: false,
         selection: null,
         hasVoted: false,
-        votingData: null
     };
 
-    onVote(data, onSubmitVote) {
-        onSubmitVote(data)
-            .then()
-            .catch()
+    componentDidMount() {
+        const { collection, title, options } = this.props.location.state;
+        this.setState({ collection, title, options });
+    }
+
+    onVote = async (onSubmitVote, getPollData) => {
+        const { location: { state: { title } } } = this.props;
+        const { selection } = this.state;
+        this.setState({ loading: true }, () => {
+            onSubmitVote(title, selection)
+                .then(async () => {
+                    const pollData = await getPollData(title);
+                    this.setState({ loading: false, hasVoted: true });
+                })
+                .catch(err => console.log(err))
+        });
+
     }
 
     onSelectOption(id) {
-        this.setState({ selection: id }, () => {
-
-        });
+        this.setState({ selection: id });
     }
 
 
     render() {
-        const { loading, hasVoted } = this.state;
+        // const { loading, hasVoted } = this.state;
+        console.log("====>", this.state, this.props.location.state);
         return (
             <FabricContext.Consumer>
                 {
@@ -35,7 +46,7 @@ class PollContainer extends Component {
                         return (
                             <Layout>
                                 {
-                                    () => <Poll {...this.state} {...this.props.location.state} onVote={() => { this.onVote(data, fabricCtx.onSubmitVote) }} onSelectOption={(id) => { this.onSelectOption(id, fabricCtx.fabric) }} />
+                                    () => <Poll {...this.state} onVote={() => { this.onVote(fabricCtx.onSubmitVote, fabricCtx.getPollData) }} onSelectOption={(id) => { this.onSelectOption(id, fabricCtx.fabric) }} />
                                 }
                             </Layout>
                         )
