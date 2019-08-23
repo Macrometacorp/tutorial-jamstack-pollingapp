@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled, { css } from 'styled-components';
 
 import { Heading2 } from '../../styledComponents/typography';
@@ -95,7 +94,7 @@ const Poll = ({
     onSelectOption,
     onVote,
 }) => {
-    const optionsArray = options || [];
+    let optionsArray = options || [];
     const renderOptions = !loading && optionsArray.length > 0;
     const renderVoteButton = renderOptions && !hasVoted;
     const voteIsDisabled = loading || !selection;
@@ -140,16 +139,6 @@ const Poll = ({
             </ButtonContainer>
         </Container>
     );
-};
-
-Poll.propTypes = {
-    loading: PropTypes.bool.isRequired,
-    options: PropTypes.array.isRequired,
-    title: PropTypes.string.isRequired,
-    selection: PropTypes.string.isRequired,
-    hasVoted: PropTypes.bool.isRequired,
-    onSelectOption: PropTypes.func.isRequired,
-    onVote: PropTypes.func.isRequired,
 };
 
 export default Poll;

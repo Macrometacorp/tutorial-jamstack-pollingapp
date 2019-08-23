@@ -52,7 +52,6 @@ class FabricProvider extends React.Component {
 
     getPollData = async (pollName) => {
         const { fabric, collection, documentKey } = this.state;
-        debugger;
         const query = `FOR x in ${collection} FILTER x._key=="${documentKey}" return x.polls`;
         const cursor = await fabric.query(query);
         const results = await cursor.all();
