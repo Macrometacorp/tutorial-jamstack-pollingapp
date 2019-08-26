@@ -25,7 +25,30 @@ The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.
   ```
   The `polls` key will contain the polled data. `content` and `title` keys in the document are in the markdown format. Once they go through `gatsby-source-c8db`, data in `title` is converted to `<h2></h2>`, and `content` to `<p></p>`.
 
-# 3. Running the app locally
+# 3. Providing connection to the federation for the plugin.
+ The federation login details along with the collection to be used and transformations has to be provided in the application's `gatsby-config.js` like below:
+ 
+ ```js
+    {
+      resolve: "gatsby-source-c8db",
+      options: {
+        config: "https://try.macrometa.io",
+        auth: {
+          tenant: "<my-tenant>",
+          user: "<my-user>",
+          password: "<my-password>"
+        },
+        geoFabric: "<my-geoFabric>",
+        collection: 'poll',
+        map: {
+          poll: { title: "text/markdown", content: "text/markdown" }
+        }
+      }
+    }
+
+ ```
+
+# 4. Running the app locally
 
 >NOTE: This step is just for running the UI locally. The actual app is deployed on an AWS S3 Bucket. For the steps on S3 goto the How to deploy app on S3 section.
 
@@ -33,7 +56,7 @@ The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.
 2. Run `npm install` to get all the `node modules`
 3. Execute `npm run develop` to start the local server. This will start  local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
 
-# 4. How to deploy app(UI) on S3
+# 5. How to deploy app(UI) on S3
 
 If `node_modules` is not there, execute `npm install`.
 If you dont have S3 CLI configured then configure it. More info can be found [here](https://www.gatsbyjs.org/docs/deploying-to-s3-cloudfront/#getting-started---aws-cli).
