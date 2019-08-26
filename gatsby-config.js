@@ -37,6 +37,7 @@ module.exports = {
           user: "root",
           password: "demo"
         },
+        geoFabric: "_system",
         collection: 'poll',
         map: {
           poll: { title: "text/markdown", content: "text/markdown" }
@@ -56,6 +57,12 @@ module.exports = {
         gfm: true,
         // Plugins configs
         plugins: [],
+      },
+    },
+    {
+      resolve: `gatsby-plugin-s3`,
+      options: {
+        bucketName: 'try.macrometa.gatsby'
       },
     }
     // this (optional) plugin enables Progressive Web App + Offline functionality
