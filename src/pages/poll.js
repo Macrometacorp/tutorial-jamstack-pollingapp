@@ -24,7 +24,7 @@ class PollContainer extends Component {
             onSubmitVote(title, selection)
                 .then(async () => {
                     const pollData = await getPollData(title);
-                    this.setState({ loading: false, hasVoted: true, options: pollData });
+                    this.setState({ loading: false, hasVoted: true, options: Object.values(pollData) });
                 })
                 .catch(err => console.log(err))
         });

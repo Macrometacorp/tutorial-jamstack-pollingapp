@@ -29,15 +29,15 @@ const OptionResult = styled.div`
 // up this component. I did it this way to show the versatility of styled-
 // components.
 const Option = styled(
-    ({
-        hasVoted,
-        // destructure these next two props so that react
-        // doesn't complain about unsupported html tag attributes
-        // https://reactjs.org/warnings/unknown-prop.html
-        selected,
-        optionIsSelected,
-        ...props
-    }) => (hasVoted ? <div {...props} /> : <button {...props} />),
+  ({
+    hasVoted,
+    // destructure these next two props so that react
+    // doesn't complain about unsupported html tag attributes
+    // https://reactjs.org/warnings/unknown-prop.html
+    selected,
+    optionIsSelected,
+    ...props
+  }) => (hasVoted ? <div {...props} /> : <button {...props} />),
 )`
   display: flex;
   align-items: center;
@@ -48,29 +48,29 @@ const Option = styled(
   padding: 10px 20px;
   box-shadow: 0 10px 20px
     ${({ selected }) =>
-        selected ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.2)'};
+    selected ? 'rgba(0, 0, 0, 0.5)' : 'rgba(0, 0, 0, 0.2)'};
   transition: transform 150ms linear, box-shadow 150ms linear,
     color 150ms linear;
   cursor: ${({ hasVoted }) => (hasVoted ? 'default' : 'pointer')};
   color: ${({ selected, optionIsSelected }) =>
-        selected
-            ? 'rgba(0, 0, 0, 0.8)'
-            : optionIsSelected
-                ? 'rgba(0, 0, 0, 0.4)'
-                : 'rgba(0, 0, 0, 0.6)'};
+    selected
+      ? 'rgba(0, 0, 0, 0.8)'
+      : optionIsSelected
+        ? 'rgba(0, 0, 0, 0.4)'
+        : 'rgba(0, 0, 0, 0.6)'};
   ${({ hasVoted }) =>
-        hasVoted
-            ? css`
+    hasVoted
+      ? css`
           &:hover,
           &:focus {
             color: rgba(0, 0, 0, 0.8);
           }
         `
-            : css`
+      : css`
           &:hover,
           &:focus {
             transform: ${({ selected }) =>
-                    selected ? 'translateY(0)' : 'translateY(-3px)'};
+          selected ? 'translateY(0)' : 'translateY(-3px)'};
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             color: rgba(0, 0, 0, 0.8);
           }
@@ -86,59 +86,59 @@ const ButtonContainer = styled.div`
 `;
 
 const Poll = ({
-    loading,
-    options,
-    title,
-    selection,
-    hasVoted,
-    onSelectOption,
-    onVote,
+  loading,
+  options,
+  title,
+  selection,
+  hasVoted,
+  onSelectOption,
+  onVote,
 }) => {
-    let optionsArray = options || [];
-    const renderOptions = !loading && optionsArray.length > 0;
-    const renderVoteButton = renderOptions && !hasVoted;
-    const voteIsDisabled = loading || !selection;
-    const totalVotes = optionsArray.reduce((aggr, curr) => aggr + curr.votes, 0);
+  let optionsArray = options || [];
+  const renderOptions = !loading && optionsArray.length > 0;
+  const renderVoteButton = renderOptions && !hasVoted;
+  const voteIsDisabled = loading || !selection;
+  const totalVotes = optionsArray.reduce((aggr, curr) => aggr + curr.votes, 0);
 
-    if (hasVoted) {
-        optionsArray = optionsArray.sort((a, b) => b.votes - a.votes);
-    }
+  if (hasVoted) {
+    optionsArray = optionsArray.sort((a, b) => b.votes - a.votes);
+  }
 
-    return (
-        <Container>
-            <Heading2>{loading || !title ? 'loading...' : title}</Heading2>
-            <div>
-                {renderOptions &&
-                    optionsArray.map(option => {
-                        const id = option.id;
-                        const selected = id === selection;
-                        const perc = ((option.votes / totalVotes) * 100).toFixed(2) || 0;
+  return (
+    <Container>
+      <Heading2>{loading || !title ? 'loading...' : title}</Heading2>
+      <div>
+        {renderOptions &&
+          optionsArray.map(option => {
+            const id = option.id;
+            const selected = id === selection;
+            const perc = ((option.votes / totalVotes) * 100).toFixed(2) || 0;
 
-                        return (
-                            <Option
-                                key={id}
-                                selected={selected}
-                                hasVoted={hasVoted}
-                                optionIsSelected={!!selection}
-                                onClick={() => !hasVoted && onSelectOption(id)}>
-                                <OptionText>{option.text}</OptionText>
-                                {hasVoted &&
-                                    !isNaN(perc) && <OptionResult>{perc}%</OptionResult>}
-                            </Option>
-                        );
-                    })}
-            </div>
-            <ButtonContainer>
-                {renderVoteButton && (
-                    <Button
-                        disabled={voteIsDisabled}
-                        onClick={() => { !voteIsDisabled && onVote() }}>
-                        Vote
+            return (
+              <Option
+                key={id}
+                selected={selected}
+                hasVoted={hasVoted}
+                optionIsSelected={!!selection}
+                onClick={() => !hasVoted && onSelectOption(id)}>
+                <OptionText>{option.text}</OptionText>
+                {hasVoted &&
+                  !isNaN(perc) && <OptionResult>{perc}%</OptionResult>}
+              </Option>
+            );
+          })}
+      </div>
+      <ButtonContainer>
+        {renderVoteButton && (
+          <Button
+            disabled={voteIsDisabled}
+            onClick={() => { !voteIsDisabled && onVote() }}>
+            Vote
           </Button>
-                )}
-            </ButtonContainer>
-        </Container>
-    );
+        )}
+      </ButtonContainer>
+    </Container>
+  );
 };
 
 export default Poll;
