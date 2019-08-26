@@ -1,97 +1,66 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.org">
-    <img alt="Gatsby" src="https://www.gatsbyjs.org/monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's default starter
-</h1>
+# 1. Overview
 
-Kick off your project with this default boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+Demo to show how to make a JAM stack application using C8DB and gatsby.
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.org/docs/gatsby-starters/)._
+This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby-source-c8db) to get some of the data as markdown and then transform it to HTML to display directly in the browser.
 
-## 🚀 Quick start
+The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.amazonaws.com
 
-1.  **Create a Gatsby site.**
+# 2. Prerequisites
+  1. `nodejs` and `npm` must be installed on your system.
+  2. There should be a collection called `poll` in your federation, with a single document with `title` and `content` fields in markdown format.
 
-    Use the Gatsby CLI to create a new site, specifying the default starter.
+    > NOTE: All the info for this demo is extraced from gatsby at runtime. Therefore document's `_key` should be the same as what it was while gatsby build was taking place. For now it is `955694336`.
 
-    ```sh
-    # create a new Gatsby site using the default starter
-    gatsby new my-default-starter https://github.com/gatsbyjs/gatsby-starter-default
-    ```
 
-1.  **Start developing.**
+  A sample document can be seen below:
 
-    Navigate into your new site’s directory and start it up.
+  ```json
+{
+  "title": "## A Next-Generation Polling Application",
+  "content": "Built from the ground up - Ut pariatur velit eu fugiat ut. Veniam commodo non esse proident ut anim irure voluptate commodo aliqua tempor Lorem excepteur cupidatat. Nulla commodo ex laboris eu sit nisi exercitation dolore labore qui elit non Lorem minim. Voluptate pariatur anim esse irure ipsum ut pariatur. Mollit occaecat velit occaecat sint pariatur tempor. Consectetur culpa tempor dolore amet officia dolore nulla nisi sunt ea.",
+  "polls":{}
+}
 
-    ```sh
-    cd my-default-starter/
-    gatsby develop
-    ```
+  ```
+  The `polls` key will contain the polled data. `content` and `title` keys in the document are in the markdown format. Once they go through `gatsby-source-c8db`, data in `title` is converted to `<h2></h2>`, and `content` to `<p></p>`.
 
-1.  **Open the source code and start editing!**
+# 3. Running the app locally
 
-    Your site is now running at `http://localhost:8000`!
+>NOTE: This step is just for running the UI locally. The actual app is deployed on an AWS S3 Bucket. For the steps on S3 goto the How to deploy app on S3 section.
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql)._
+1. Clone this reopo
+2. Run `npm install` to get all the `node modules`
+3. Execute `npm run develop` to start the local server. This will start  local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
 
-    Open the `my-default-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+# 4. How to deploy app(UI) on S3
 
-## 🧐 What's inside?
+If `node_modules` is not there, execute `npm install`.
+If you dont have S3 CLI configured then configure it. More info can be found [here](https://www.gatsbyjs.org/docs/deploying-to-s3-cloudfront/#getting-started---aws-cli).
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+This project makes use of `gatsby-plugin-s3` to publish to S3.
+Make sure you have a bucket on S3 with appropriate bucket policy.
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
-
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
-
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
-
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
-
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
-
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.org/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
-
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
-
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
-
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.org/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
-
-9.  **`LICENSE`**: Gatsby is licensed under the MIT license.
-
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
-
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
-
-12. **`README.md`**: A text file containing useful reference information about your project.
-
-## 🎓 Learning Gatsby
-
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.org/). Here are some places to start:
-
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.org/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
-
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.org/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
-
-## 💫 Deploy
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-default)
-
-<!-- AUTO-GENERATED-CONTENT:END -->
+A sample `bucket policy` is:
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PublicReadGetObject",
+            "Effect": "Allow",
+            "Principal": "*",
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::<your-s3-bucket-name>/*"
+        }
+    ]
+}
+```
+Once the bucket is made just provide your `bucketName` in the `gatsby-config.js` file of the project
+```
+{
+      resolve: `gatsby-plugin-s3`,
+      options: {
+        bucketName: 'try.macrometa.gatsby'
+      }
+```
