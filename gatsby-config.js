@@ -58,6 +58,12 @@ module.exports = {
         // Plugins configs
         plugins: [],
       },
+    },
+    {
+      resolve: `gatsby-plugin-s3`,
+      options: {
+        bucketName: 'try.macrometa.gatsby'
+      },
     }
     // this (optional) plugin enables Progressive Web App + Offline functionality
     // To learn more, visit: https://gatsby.dev/offline
