@@ -49,10 +49,12 @@ const TemplateWrapper = ({ children }) => {
     <FabricContext.Consumer>
       {
         fabricCtx => {
-          let component = <Container>{children(fabricCtx)}</Container>;
+          let component;
           if (!fabricCtx.isSignedIn) {
-            component = <Heading2>Loading...</Heading2>;
-            fabricCtx.updateFabric(config, tenant, user, password, geoFabric);
+            component = <Heading2 style={{ display: "flex", justifyContent: "center", marginTop: "102px" }}>Loading...</Heading2>;
+            typeof fabricCtx.updateFabric === "function" && fabricCtx.updateFabric(config, tenant, user, password, geoFabric);
+          } else {
+            component = <Container>{children(fabricCtx)}</Container>;
           }
           return (
             <div>
