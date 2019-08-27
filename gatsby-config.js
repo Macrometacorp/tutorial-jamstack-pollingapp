@@ -29,6 +29,10 @@ module.exports = {
       },
     },
     {
+      resolve: `gatsby-plugin-create-client-paths`,
+      options: { prefixes: [`/poll/*`] },
+    },
+    {
       resolve: "gatsby-source-c8db",
       options: {
         config: "https://try.macrometa.io",
@@ -38,9 +42,9 @@ module.exports = {
           password: "demo"
         },
         geoFabric: "_system",
-        collection: 'poll',
+        collection: 'markdownContent',
         map: {
-          poll: { title: "text/markdown", content: "text/markdown" }
+          markdownContent: { title: "text/markdown", content: "text/markdown" }
         }
       }
     },

@@ -13,6 +13,8 @@ import Helmet from 'react-helmet';
 import Header from './header';
 import './layout.css';
 import { Container } from '../styledComponents/layout';
+import FabricContext from "../context/JSC8Context";
+import { Heading2 } from '../styledComponents/typography';
 
 const TemplateWrapper = ({ children }) => {
   const data = useStaticQuery(graphql`
@@ -22,24 +24,55 @@ const TemplateWrapper = ({ children }) => {
         title
       }
     }
-  }
+    allSitePlugin(filter: {name: {eq: "gatsby-source-c8db"}}) {
+      edges {
+        node {
+          name
+          pluginOptions {
+            auth {
+              password
+              tenant
+              user
+            }
+            config
+            geoFabric
+          }
+        }
+      }
+    }
+  }  
 `);
 
+  const { pluginOptions: { auth: { tenant, user, password }, config, geoFabric } } = data.allSitePlugin.edges[0].node;
+
   return (
-    <div>
-      <Helmet
-        title={data.site.siteMetadata.title}
-        meta={[
-          { name: 'description', content: 'Sample' },
-          { name: 'keywords', content: 'sample, something' },
-        ]}
-      />
-      <Header
-        background="background-image: linear-gradient(116deg, #08AEEA 0%, #2AF598 100%)"
-        title={data.site.siteMetadata.title}
-      />
-      <Container>{children()}</Container>
-    </div>
+    <FabricContext.Consumer>
+      {
+        fabricCtx => {
+          let component = <Container>{children(fabricCtx)}</Container>;
+          if (!fabricCtx.isSignedIn) {
+            component = <Heading2>Loading...</Heading2>;
+            fabricCtx.updateFabric(config, tenant, user, password, geoFabric);
+          }
+          return (
+            <div>
+              <Helmet
+                title={data.site.siteMetadata.title}
+                meta={[
+                  { name: 'description', content: 'Sample' },
+                  { name: 'keywords', content: 'sample, something' },
+                ]}
+              />
+              <Header
+                background="background-image: linear-gradient(116deg, #08AEEA 0%, #2AF598 100%)"
+                title={data.site.siteMetadata.title}
+              />
+              {component}
+            </div>
+          )
+        }
+      }
+    </FabricContext.Consumer>
   )
 };
 

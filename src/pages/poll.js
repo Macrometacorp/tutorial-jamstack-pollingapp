@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import FabricContext from "../context/JSC8Context";
 import Poll from "../components/Poll/index";
 import Layout from "../components/layout";
 
@@ -10,21 +9,30 @@ class PollContainer extends Component {
         loading: false,
         selection: "",
         hasVoted: false,
+        options: []
     };
 
     componentDidMount() {
-        const { collection, title, options } = this.props.location.state;
-        this.setState({ collection, title, options });
+        const { title, options } = this.props.location.state;
+        this.setState({ title, options });
     }
 
-    onVote = async (onSubmitVote, getPollData) => {
-        const { location: { state: { title } } } = this.props;
+    onVote = async (onSubmitVote, getPollData, establishLiveConnection) => {
+        const { location: { state: { title, documentKey } } } = this.props;
         const { selection } = this.state;
         this.setState({ loading: true }, () => {
             onSubmitVote(title, selection)
                 .then(async () => {
-                    const pollData = await getPollData(title);
-                    this.setState({ loading: false, hasVoted: true, options: Object.values(pollData) });
+                    const pollData = await getPollData(title, documentKey);
+                    this.setState({ loading: false, hasVoted: true, options: Object.values(pollData) }, () => {
+                        // open socket connections for live updates
+                        const onmessage = msg => {
+                            const { payload } = JSON.parse(msg);
+                            const decoded = JSON.parse(atob(payload));
+                            this.setState({ options: decoded[title] });
+                        }
+                        establishLiveConnection(onmessage);
+                    });
                 })
                 .catch(err => console.log(err))
         });
@@ -38,19 +46,16 @@ class PollContainer extends Component {
 
     render() {
         return (
-            <FabricContext.Consumer>
+            <Layout>
                 {
-                    fabricCtx => {
-                        return (
-                            <Layout>
-                                {
-                                    () => <Poll {...this.state} onVote={() => { this.onVote(fabricCtx.onSubmitVote, fabricCtx.getPollData) }} onSelectOption={(id) => { this.onSelectOption(id, fabricCtx.fabric) }} />
-                                }
-                            </Layout>
-                        )
-                    }
+                    (fabricCtx) => (
+                        <Poll {...this.state}
+                            onVote={() => { this.onVote(fabricCtx.onSubmitVote, fabricCtx.getPollData, fabricCtx.establishLiveConnection) }}
+                            onSelectOption={(id) => { this.onSelectOption(id, fabricCtx.fabric) }}
+                        />
+                    )
                 }
-            </FabricContext.Consumer>
+            </Layout>
         );
     }
 }
