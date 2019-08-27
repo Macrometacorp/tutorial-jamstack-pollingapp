@@ -156,7 +156,8 @@ class NewPollPage extends Component {
 
     const obj = {
       _key,
-      [title]: [
+      pollName: title,
+      polls: [
         ...options
       ]
     }
@@ -198,11 +199,6 @@ class NewPollPage extends Component {
       <Layout>
         {
           (fabricCtx) => {
-            // if (!fabricCtx.isSignedIn) {
-            //   const { auth: { tenant, user, password }, config, geoFabric } = pluginOptions;
-            //   fabricCtx.updateFabric(config, tenant, user, password, geoFabric);
-            //   return <Heading2>Loading...</Heading2>;
-            // } else {
             return (
               <div>
                 <Heading2>Create a new Poll</Heading2>
@@ -237,7 +233,6 @@ class NewPollPage extends Component {
                 </ActionContainer>
               </div>
             )
-            // }
           }
         }
       </Layout>

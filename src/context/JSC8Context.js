@@ -52,29 +52,31 @@ class FabricProvider extends React.Component {
         }, dcName, `${POLLS_COLLECTION_NAME}-${getRandomInt()}`);
     }
 
-    onSubmitVote = async (pollName, selectedPollId) => {
+    getDocumentKey = () => window.location.pathname.split("/poll/")[1];
+
+    onSubmitVote = async (selectedPollId) => {
 
         const { fabric } = this.state;
-        const path = window.location.pathname;
-        const documentKey = path.split("/poll/")[1];
+        const documentKey = this.getDocumentKey();
 
-        const voteArr = await this.getPollData(pollName, documentKey);
+        const voteArr = await this.getPollData();
 
         const voteObj = voteArr.find(vote => vote.id === selectedPollId);
         voteObj.votes += 1;
 
-        const pollObj = { [pollName]: [...voteArr] };
+        const pollObj = { polls: [...voteArr] };
 
         const updatePollQuery = `UPDATE "${documentKey}" WITH ${JSON.stringify(pollObj)} in ${POLLS_COLLECTION_NAME}`;
         return fabric.query(updatePollQuery);
     }
 
-    getPollData = async (pollName, documentKey) => {
+    getPollData = async (allData) => {
+        const documentKey = this.getDocumentKey();
         const { fabric } = this.state;
         const query = `FOR x in ${POLLS_COLLECTION_NAME} FILTER x._key=="${documentKey}" return x`;
         const cursor = await fabric.query(query);
         const results = await cursor.all();
-        return results[0][pollName];
+        return allData ? results[0] : results[0].polls;
     }
 
     render() {
