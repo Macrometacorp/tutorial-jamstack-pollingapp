@@ -165,12 +165,6 @@ class NewPollPage extends Component {
     this.setState({ loading: true }, () => {
       updateCollectionData(obj)
         .then(() => {
-          this.setState({
-            options: [],
-            loading: false,
-            title: "",
-            _key
-          });
           navigate(
             `/poll/${_key}`,
             {
