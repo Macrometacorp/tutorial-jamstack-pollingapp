@@ -123,3 +123,5 @@ Once the bucket and distribution are made just provide your `bucketName` and `ho
       },
     }
 ```
+
+Once the config file is place, simply run `npm run deploy`.
