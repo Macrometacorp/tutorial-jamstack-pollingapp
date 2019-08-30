@@ -4,7 +4,8 @@ Demo to show how to make a JAM stack application using C8DB and gatsby.
 
 This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby-source-c8db) to get some of the data as markdown and then transform it to HTML to display directly in the browser.
 
-The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.amazonaws.com
+The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.amazonaws.com and hosted at  http://d31laqgvvtjedd.cloudfront.net/
+
 
 # 2. Prerequisites
   1. `nodejs` and `npm` must be installed on your system.
@@ -80,13 +81,13 @@ The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.
 
 # 4. Running the app locally
 
->NOTE: This step is just for running the UI locally. The actual app is deployed on an AWS S3 Bucket. For the steps on S3 goto the How to deploy app on S3 section.
+>NOTE: This step is just for running the UI locally. The actual app is deployed on an AWS S3 Bucket. For the steps on S3 goto the How to deploy app on S3 and CloudFront section.
 
 1. Clone this reopo
 2. Run `npm install` to get all the `node modules`
 3. Execute `npm run develop` to start the local server. This will start  local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
 
-# 5. How to deploy app(UI) on CloudFront
+# 5. How to deploy app(UI) on S3 and CloudFront
 
 If `node_modules` is not there, execute `npm install`.
 If you dont have S3 CLI configured then configure it. More info can be found [here](https://www.gatsbyjs.org/docs/deploying-to-s3-cloudfront/#getting-started---aws-cli).
@@ -125,5 +126,8 @@ Once the config file is place, simply run `npm run deploy`.
 
 
 # 6. Already deployed demo
-To allow multiple people to vote on the same topic just share the vote URL with them. A sample URL can be http://d31laqgvvtjedd.cloudfront.net/
+To allow multiple people to vote on the same topic just share the vote URL with them. A sample URL can be 
+http://d31laqgvvtjedd.cloudfront.net/poll/8db30e.
+
+To create a new poll use http://d31laqgvvtjedd.cloudfront.net/
 
