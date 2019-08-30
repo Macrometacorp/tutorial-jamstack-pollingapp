@@ -47,7 +47,7 @@ The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.
 
 ## Deployment Prerequisites
 
-  4. Create a S3 bucket with Public Access.
+  4. Create a S3 bucket with Public Access(for more steps look at Deploy on CloudFront Section).
   Enable `Static Website Hosting` from the `Properties` tab of the S3 bucket, mention index.html as the index document.
  
   5. Create a CloudFront Distribution with `Origin Domain Name` pointing to the S3 Bucket where you will upload all the build files, set `Default Root Object` to index.html. Once the Distribution is created, navigate to the `invalidations` tab of the Distribution and create an invalidation with `*` in the `Object Paths`. Then, go to the `Error Page` tab and `Create Custom Error Response` for 403 and 404 response codes, mention `/index.html` in `Response Page Path` column and 200 in `HTTP Response Code`, set `Error Catching Minimum TTL` and save the settings.
@@ -88,7 +88,6 @@ To allow multiple people to vote on the same topic just share the vote URL with 
 1. Clone this reopo
 2. Run `npm install` to get all the `node modules`
 3. Execute `npm run develop` to start the local server. This will start  local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
-4. To build the code for deployment execute `npm run build`.
 
 # 6. How to deploy app(UI) on CloudFront
 
@@ -124,4 +123,3 @@ Once the bucket and distribution are made just provide your `bucketName` and `ho
       },
     }
 ```
-The `hostname` and `protocol` will refer to your CloudFront distribution.
