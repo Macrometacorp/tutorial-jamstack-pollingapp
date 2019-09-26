@@ -61,8 +61,7 @@ The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.
       options: {
         config: "https://try.macrometa.io",
         auth: {
-          tenant: "<my-tenant>",
-          user: "<my-user>",
+          email: "<my-email>",
           password: "<my-password>"
         },
         geoFabric: "<my-geoFabric>",

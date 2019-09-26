@@ -37,8 +37,7 @@ module.exports = {
       options: {
         config: "https://try.macrometa.io",
         auth: {
-          tenant: "demo",
-          user: "root",
+          email: "demo@macrometa.io",
           password: "demo"
         },
         geoFabric: "_system",

@@ -27,10 +27,9 @@ class FabricProvider extends React.Component {
         fabric && fabric.close();
     }
 
-    updateFabric = async (config, tenant, user, password, geoFabric) => {
+    updateFabric = async (config, email, password, geoFabric) => {
         const fabricHandler = new Fabric(config);
-        await fabricHandler.login(tenant, user, password);
-        fabricHandler.useTenant(tenant);
+        await fabricHandler.login(email, password);
         fabricHandler.useFabric(geoFabric);
         this.setState({ fabric: fabricHandler, isSignedIn: true, config });
     }

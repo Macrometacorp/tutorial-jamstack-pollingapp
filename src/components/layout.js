@@ -31,8 +31,7 @@ const TemplateWrapper = ({ children }) => {
           pluginOptions {
             auth {
               password
-              tenant
-              user
+              email
             }
             config
             geoFabric
@@ -43,7 +42,7 @@ const TemplateWrapper = ({ children }) => {
   }  
 `);
 
-  const { pluginOptions: { auth: { tenant, user, password }, config, geoFabric } } = data.allSitePlugin.edges[0].node;
+  const { pluginOptions: { auth: { email, password }, config, geoFabric } } = data.allSitePlugin.edges[0].node;
 
   return (
     <FabricContext.Consumer>
@@ -52,7 +51,7 @@ const TemplateWrapper = ({ children }) => {
           let component;
           if (!fabricCtx.isSignedIn) {
             component = <Heading2 style={{ display: "flex", justifyContent: "center", marginTop: "102px" }}>Loading...</Heading2>;
-            typeof fabricCtx.updateFabric === "function" && fabricCtx.updateFabric(config, tenant, user, password, geoFabric);
+            typeof fabricCtx.updateFabric === "function" && fabricCtx.updateFabric(config, email, password, geoFabric);
           } else {
             component = <Container>{children(fabricCtx)}</Container>;
           }
