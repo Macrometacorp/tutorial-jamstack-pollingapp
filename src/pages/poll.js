@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Poll from "../components/Poll/index";
 import Layout from "../components/layout";
 import _ from 'lodash';
-// import { Heading2 } from '../styledComponents/typography';
 
 class PollContainer extends Component {
 
