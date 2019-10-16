@@ -35,7 +35,7 @@ module.exports = {
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://try.macrometa.io",
+        config: "https://gdn1.prod.macrometa.io",
         auth: {
           email: "demo@macrometa.io",
           password: "demo"
@@ -65,7 +65,9 @@ module.exports = {
     {
       resolve: `gatsby-plugin-s3`,
       options: {
-        bucketName: 'try.macrometa.gatsby'
+        bucketName: 'polling.gdn1',
+        protocol: "http",
+        hostname: "d1v71awf1hnoi8.cloudfront.net"
       },
     }
     // this (optional) plugin enables Progressive Web App + Offline functionality

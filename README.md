@@ -4,9 +4,6 @@ Demo to show how to make a JAM stack application using C8DB and gatsby.
 
 This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby-source-c8db) to get some of the data as markdown and then transform it to HTML to display directly in the browser.
 
-The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.amazonaws.com and hosted at  http://d31laqgvvtjedd.cloudfront.net/
-
-
 # 2. Prerequisites
   1. `nodejs` and `npm` must be installed on your system.
   2. There should be a collection called `markdownContent` in your federation, with a single document with `title` and `content` fields in markdown format.
@@ -60,7 +57,7 @@ The application is deployed at http://try.macrometa.gatsby.s3-website-us-east-1.
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://try.macrometa.io",
+        config: "https://gdn1.prod.macrometa.io",
         auth: {
           email: "<my-email>",
           password: "<my-password>"
@@ -114,9 +111,9 @@ Once the bucket and distribution are made just provide your `bucketName` and `ho
 {
       resolve: `gatsby-plugin-s3`,
       options: {
-        bucketName: 'try.macrometa.gatsby',
+        bucketName: 'gdn1.prod.macrometa.io',
         protocol: "http",
-        hostname: "d2m18vv70x0jgo.cloudfront.net"
+        hostname: "d1v71awf1hnoi8.cloudfront.net"
       },
     }
 ```
@@ -126,7 +123,6 @@ Once the config file is place, simply run `npm run deploy`.
 
 # 6. Already deployed demo
 To allow multiple people to vote on the same topic just share the vote URL with them. A sample URL can be 
-http://d31laqgvvtjedd.cloudfront.net/poll/8db30e.
+http://d1v71awf1hnoi8.cloudfront.net/poll/dab09a.
 
-To create a new poll use http://d31laqgvvtjedd.cloudfront.net/
-
+To create a new poll use http://d1v71awf1hnoi8.cloudfront.net
