@@ -82,14 +82,4 @@ TemplateWrapper.propTypes = {
   data: PropTypes.object,
 };
 
-export const query = graphql`
-  query AboutQuery {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-  }
-`;
-
 export default TemplateWrapper;

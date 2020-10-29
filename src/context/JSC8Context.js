@@ -40,15 +40,16 @@ class FabricProvider extends React.Component {
         return collection.save(obj);
     }
 
-    establishLiveConnection = (onmessage) => {
+    establishLiveConnection = async (onmessage) => {
         const { fabric, config } = this.state;
         const dcName = config.split("https://")[1];
         const collection = fabric.collection(POLLS_COLLECTION_NAME);
-        collection.onChange({
-            onopen: () => console.log(`Connection opened for ${POLLS_COLLECTION_NAME}`),
-            onmessage,
-            onclose: () => console.log(`Connection closed for ${POLLS_COLLECTION_NAME}`)
-        }, dcName, `${POLLS_COLLECTION_NAME}-${getRandomInt()}`);
+        const ws = await collection.onChange(dcName, `${POLLS_COLLECTION_NAME}-${getRandomInt()}`);
+
+        ws.on("open", () => console.log(`Connection opened for ${POLLS_COLLECTION_NAME}`));
+        ws.on("message", onmessage);
+        ws.on("error", e => console.log(`Connection errored for ${POLLS_COLLECTION_NAME}: ${e}`));
+        ws.on("close", () => console.log(`Connection closed for ${POLLS_COLLECTION_NAME}`));
     }
 
     getDocumentKey = () => window.location.pathname.split("/poll/")[1];

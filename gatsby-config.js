@@ -37,8 +37,8 @@ module.exports = {
       options: {
         config: "https://gdn1.prod.macrometa.io",
         auth: {
-          email: "demo@macrometa.io",
-          password: "demo"
+          email: "xxxx@macrometa.io",
+          password: "xxxx"
         },
         geoFabric: "_system",
         collection: 'markdownContent',
