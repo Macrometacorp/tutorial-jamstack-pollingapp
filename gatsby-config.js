@@ -35,7 +35,7 @@ module.exports = {
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://gdn.paas.macrometa.io",
+        config: "https://gdn1.prod.macrometa.io",
         auth: {
           email: "xxxx@macrometa.io",
           password: "xxxx"
