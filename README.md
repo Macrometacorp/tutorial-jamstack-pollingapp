@@ -57,7 +57,7 @@ This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://gdn1.prod.macrometa.io",
+        config: "https://gdn.paas.macrometa.io",
         auth: {
           email: "<my-email>",
           password: "<my-password>"
