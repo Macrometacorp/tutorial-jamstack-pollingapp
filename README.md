@@ -59,7 +59,7 @@ This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby
         config: "https://gdn.paas.macrometa.io",
         auth: {
           email: "<my-email>",
-          password: "process.env.MM_PW"
+          password: process.env.MM_PW
         },
         geoFabric: "_system",
         collection: 'markdownContent',
