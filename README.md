@@ -84,7 +84,7 @@ You will only have one thing in each of those files: `MM_PW='<your-password-here
 2. Run `npm install`
 3. Execute `npm run develop` to start the local server. This will start local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
 
-# 5. How to deploy app(UI) on Github Pages
+# How to deploy app(UI) on Github Pages
 
 Simply run `npm run deploy`!
 
