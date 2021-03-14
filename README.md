@@ -1,31 +1,31 @@
-# 1. Overview
+# Intro
 
-Demo to show how to make a JAM stack application using C8DB and gatsby.
+Welcome to our example app showing off how to make a JAM stack application using Macrometa and GatsbyJS.
 
 This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby-source-c8db) to get some of the data as markdown and then transform it to HTML to display directly in the browser.
 
-# 2. Prerequisites
-  1. `nodejs` and `npm` must be installed on your system.
-  2. There should be a collection called `markdownContent` in your federation, with a single document with `title` and `content` fields in markdown format.
+# Getting Started 
+  1. [nodejs and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) and Gatsby-CLI `npm install -g gatsby-cli` must be installed on your machine.
+  2. If you don't have one already go ahead and signup for a [free Macrometa developer account](https://auth.paas.macrometa.io/signup).
+  3. Once you're logged in to Macrometa create a `document collection` called `markdownContent`. Then create a single document with `title` and `content` fields in markdown format. This creates your data model the app will be using for it's static content.
 
-      A sample document in `markdownContent` can be seen below:
+      Here's an example of what the `markdownContent` collection should look like:
 
   ```json
 {
-  "title": "## A Next-Generation Polling Application",
-  "content": "Built from the ground up - Ut pariatur velit eu fugiat ut. Veniam commodo non esse proident ut anim irure voluptate commodo aliqua tempor Lorem excepteur cupidatat. Nulla commodo ex laboris eu sit nisi exercitation dolore labore qui elit non Lorem minim. Voluptate pariatur anim esse irure ipsum ut pariatur. Mollit occaecat velit occaecat sint pariatur tempor. Consectetur culpa tempor dolore amet officia dolore nulla nisi sunt ea."
+  "title": "## Real-Time Polling Application",
+  "content": "Full-Stack Geo-Distributed Serverless App Built with GatsbyJS and Macrometa!"
 }
   ```
  `content` and `title` keys in the document are in the markdown format. Once they go through `gatsby-source-c8db`, data in `title` is converted to `<h2></h2>`, and `content` to `<p></p>`.
 
-  3. There should be a collection called `polls` where the poll data will be stored.
+  4. Now create a second `document collection` called `polls`. This is where the poll data will be stored.
 
  In the `polls` collection each poll will be stored as a separate document. A sample document is mentioned below:
 
  ```json
-
 {
-  "pollName": "Which pet do you prefer?",
+  "pollName": "What is your spirit animal?",
   "polls": [
     {
       "editing": false,
@@ -38,20 +38,19 @@ This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby
       "id": "b8aa60",
       "text": "cat",
       "votes": 1
+    },
+    {
+      "editing": false,
+      "id": "b8aa42",
+      "text": "unicorn",
+      "votes": 10
     }
   ]
 }
  ```
 
-## Deployment Prerequisites
-
-  4. Create a S3 bucket with Public Access(for more steps look at Deploy on CloudFront Section).
-  Enable `Static Website Hosting` from the `Properties` tab of the S3 bucket, mention index.html as the index document.
- 
-  5. Create a CloudFront Distribution with `Origin Domain Name` pointing to the S3 Bucket where you will upload all the build files, set `Default Root Object` to index.html. Once the Distribution is created, navigate to the `invalidations` tab of the Distribution and create an invalidation with `*` in the `Object Paths`. Then, go to the `Error Page` tab and `Create Custom Error Response` for 403 and 404 response codes, mention `/index.html` in `Response Page Path` column and 200 in `HTTP Response Code`, set `Error Catching Minimum TTL` and save the settings.
-
-# 3. Providing connection to the federation for the plugin.
- The federation login details along with the collection to be used and transformations has to be provided in the application's `gatsby-config.js` like below:
+# Setting up Auth
+ Your Macrometa login details along with the collection to be used and markdown transformations has to be provided in the application's `gatsby-config.js` like below:
  
  ```js
     {
@@ -60,9 +59,9 @@ This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby
         config: "https://gdn.paas.macrometa.io",
         auth: {
           email: "<my-email>",
-          password: "<my-password>"
+          password: "process.env.MM_PW"
         },
-        geoFabric: "<my-geoFabric>",
+        geoFabric: "_system",
         collection: 'markdownContent',
         map: {
           markdownContent: { 
@@ -75,54 +74,27 @@ This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby
 
  ```
 
-# 4. Running the app locally
+Under `password` you will notice that it says `process.env.MM_PW`, instead of putting your password there we are going to create some `.env` files and make sure that they are listed in our `.gitignore` file so we don't accidently push our Macrometa password back to Github. In your root directory create `.env.development` and `.env.production` files.
 
->NOTE: This step is just for running the UI locally. The actual app is deployed on an AWS S3 Bucket. For the steps on S3 goto the How to deploy app on S3 and CloudFront section.
+You will only have one thing in each of those files: `MM_PW='<your-password-here>'`
 
-1. Clone this reopo
-2. Run `npm install` to get all the `node modules`
-3. Execute `npm run develop` to start the local server. This will start  local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
+# Running the app locally
 
-# 5. How to deploy app(UI) on S3 and CloudFront
+1. Fork this reopo and clone your fork onto your local machine
+2. Run `npm install`
+3. Execute `npm run develop` to start the local server. This will start local development server on `http://localhost:<some_port>` and the GraphiQL should be at `http://localhost:<some_port>/___graphql`
 
-If `node_modules` is not there, execute `npm install`.
-If you dont have S3 CLI configured then configure it. More info can be found [here](https://www.gatsbyjs.org/docs/deploying-to-s3-cloudfront/#getting-started---aws-cli).
+# 5. How to deploy app(UI) on Github Pages
 
-This project makes use of `gatsby-plugin-s3` to publish to S3.
-Make sure you have a bucket on S3 with appropriate bucket policy.
+Simply run `npm run deploy`!
 
-A sample `bucket policy` is:
-```
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PublicReadGetObject",
-            "Effect": "Allow",
-            "Principal": "*",
-            "Action": "s3:GetObject",
-            "Resource": "arn:aws:s3:::<your-s3-bucket-name>/*"
-        }
-    ]
-}
-```
-Once the bucket and distribution are made just provide your `bucketName` and `hostname` in the `gatsby-config.js` file of the project
-```
-{
-      resolve: `gatsby-plugin-s3`,
-      options: {
-        bucketName: 'gdn1.prod.macrometa.io',
-        protocol: "http",
-        hostname: "d1v71awf1hnoi8.cloudfront.net"
-      },
-    }
-```
+Gatsby will automaticall generate the static code for the site, create a branch called `gh-pages`, and deploy it to Github.
 
-Once the config file is place, simply run `npm run deploy`.
+Now you can access your site at `<your-github-username>.github.io/tutorial-jamstack-pollingapp`
 
+# You can checkout an example of the app here
 
-# 6. Already deployed demo
 To allow multiple people to vote on the same topic just share the vote URL with them. A sample URL can be 
-http://d1v71awf1hnoi8.cloudfront.net/poll/dab09a.
+https://macrometacorp.github.io/tutorial-jamstack-pollingapp/poll/dab09a.
 
-To create a new poll use http://d1v71awf1hnoi8.cloudfront.net
+To create a new poll use https://macrometacorp.github.io/tutorial-jamstack-pollingapp
