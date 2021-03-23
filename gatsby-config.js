@@ -1,9 +1,14 @@
+require("dotenv").config({
+  path: `.env.${process.env.NODE_ENV}`,
+})
+
 module.exports = {
   siteMetadata: {
     title: `Macrometa Polling App`,
-    description: `A polling app to showcase Macrometa's JAM stack capabilities`,
+    description: `A polling app to showcase Macrometa's JAMStack capabilities`,
     author: `@gatsbyjs`,
   },
+  pathPrefix: "/tutorial-jamstack-pollingapp",
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-styled-components`,
@@ -37,8 +42,8 @@ module.exports = {
       options: {
         config: "https://gdn.paas.macrometa.io",
         auth: {
-          email: "xxxx@macrometa.io",
-          password: "xxxx"
+          email: "<my-email>",
+          password: process.env.MM_PW
         },
         geoFabric: "_system",
         collection: 'markdownContent',
