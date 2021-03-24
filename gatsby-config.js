@@ -42,7 +42,7 @@ module.exports = {
       options: {
         config: "https://gdn.paas.macrometa.io",
         auth: {
-          email: "<my-email>",
+          email: process.env.MM_EMAIL,
           password: process.env.MM_PW
         },
         geoFabric: "_system",
