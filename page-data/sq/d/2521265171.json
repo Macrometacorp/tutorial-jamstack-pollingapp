@@ -1,0 +1,1 @@
+{"data":{"site":{"siteMetadata":{"title":"Macrometa Polling App"}},"allSitePlugin":{"edges":[{"node":{"name":"gatsby-source-c8db","pluginOptions":{"auth":{"password":"demo","email":"demo@macrometa.io"},"config":"https://gdn.paas.macrometa.io","geoFabric":"_system"}}}]}}}
