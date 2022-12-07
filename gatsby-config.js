@@ -40,12 +40,12 @@ module.exports = {
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://gdn.paas.macrometa.io",
+        config: "https://play.macrometa.io",
         auth: {
           email: process.env.MM_EMAIL,
           password: process.env.MM_PW
         },
-        geoFabric: "_system",
+        geoFabric: "polling_app",
         collection: 'markdownContent',
         map: {
           markdownContent: { title: "text/markdown", content: "text/markdown" }
