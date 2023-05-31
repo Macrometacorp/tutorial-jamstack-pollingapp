@@ -40,7 +40,7 @@ module.exports = {
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://play.macrometa.io",
+        config: "https://play2.paas.macrometa.io",
         auth: {
           email: process.env.MM_EMAIL,
           password: process.env.MM_PW
