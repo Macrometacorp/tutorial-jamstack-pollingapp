@@ -1,1 +1,1 @@
-{"data":{"site":{"siteMetadata":{"title":"Macrometa Polling App"}},"allSitePlugin":{"edges":[{"node":{"name":"gatsby-source-c8db","pluginOptions":{"auth":{"password":"demo","email":"demo@macrometa.io"},"config":"https://play.macrometa.io","geoFabric":"polling_app"}}}]}}}
+{"data":{"site":{"siteMetadata":{"title":"Macrometa Polling App"}},"allSitePlugin":{"edges":[{"node":{"name":"gatsby-source-c8db","pluginOptions":{"auth":{"password":"demo","email":"demo@macrometa.io"},"config":"https://play2.paas.macrometa.io","geoFabric":"polling_app"}}}]}}}
