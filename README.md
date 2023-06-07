@@ -56,12 +56,12 @@ This demo makes use of [c8db-source-plugin](https://www.npmjs.com/package/gatsby
     {
       resolve: "gatsby-source-c8db",
       options: {
-        config: "https://play.macrometa.io",
+        config: "https://play2.paas.macrometa.io",
         auth: {
           email: process.env.MM_EMAIL,
           password: process.env.MM_PW
         },
-        geoFabric: "_system",
+        geoFabric: "polling_app",
         collection: 'markdownContent',
         map: {
           markdownContent: { 
